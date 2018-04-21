@@ -8,14 +8,14 @@ void assert_equal(string, string, string);
 #define assert_fail(command, name) do { \
 try {\
   command;\
-} catch { assert_equal(1,1, name); }\
+} catch { assert_equal(1,1, name); return; }\
 assert_equal("no exception", "exception", name);\
 } while(0)
 
 #define assert_fail_message(command, message, name) do { \
 try {\
   command;\
-} catch (string *msg) { assert_equal(*msg, message, name); }\
+} catch (string *msg) { assert_equal(*msg, message, name); return; }\
 assert_equal("no exception", "exception", name);\
 } while(0)
 

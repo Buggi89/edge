@@ -37,7 +37,7 @@ void vertex_compare() {
 
 void edge_init_fail() {
 
-  assert_fail_message(edge cut(2.0,1.0,0.0,1.0,1.0,0.0), "Points for edge are identical.", "Edge initialisation fails");
+  assert_fail_message(edge cut(1.0,1.0,0.0,1.0,1.0,0.0), "Points for edge are identical.", "Edge initialisation fails");
 
 }
 

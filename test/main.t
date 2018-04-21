@@ -4,6 +4,13 @@
 int field_tests();
 int grid_tests();
 
+int main() {
+
+  field_tests();
+  grid_tests();
+
+}
+
 void assert_equal(int act, int exp, string message) {
 
   int success = (act==exp);
@@ -34,12 +41,5 @@ void assert_equal(string act, string exp, string message) {
     cout << "Expected [" << exp << "], got [" << act << "]\n";
     exit(1);
   }
-
-}
-
-int main() {
-
-  field_tests();
-  grid_tests();
 
 }

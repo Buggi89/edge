@@ -19,6 +19,8 @@ edge::edge(double ax, double ay, double az, double bx, double by, double bz) {
 
   setVertices(ax,ay,az,bx,by,bz);
 
+  if(vertices[0] == vertices[1]) throw new string("Points for edge are identical.");
+
   bodies = nullptr;
   faces  = nullptr;
 

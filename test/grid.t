@@ -4,7 +4,8 @@
 #include <grid.h>
 
 void vertex_compare();
-void edge_init();
+void edge_init_fail();
+void edge_init_success();
 void edge_setVertices();
 void face_init();
 
@@ -13,7 +14,8 @@ void grid_tests() {
   cout << "Testing class vertex: \n";
   vertex_compare();
   cout << "Testing class edge: \n";
-  edge_init();
+  edge_init_fail();
+  edge_init_success();
   edge_setVertices();
   cout << "Testing class face: \n";
   face_init();
@@ -33,7 +35,13 @@ void vertex_compare() {
 
 }
 
-void edge_init() {
+void edge_init_fail() {
+
+  assert_fail_message(edge cut(2.0,1.0,0.0,1.0,1.0,0.0), "Points for edge are identical.", "Edge initialisation fails");
+
+}
+
+void edge_init_success() {
 
   edge cut(1.0,1.0,0.0,4.0,5.0,0.0);
   assert_equal(cut.getLength(), 5.0, "Length of the edge",1e-15);

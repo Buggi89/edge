@@ -14,8 +14,8 @@ class vertex {
 
     vertex() {}
     ~vertex() {}
-    vertex(double ax) { vertex(ax,0.0,0.0); }
-    vertex(double ax,double ay) { vertex(ax,ay,0.0); }
+    vertex(double ax) : vertex(ax,0.0,0.0) {}
+    vertex(double ax,double ay) : vertex(ax,ay,0.0) {}
     vertex(double,double,double);
 
     bool operator==(vertex &other);
@@ -32,11 +32,11 @@ class vertex {
 class edge {
 
   public:
-    edge() { edge(0.0,0.0,0.0,1.0,0.0,0.0); }
+    edge() : edge(0.0,0.0,0.0,1.0,0.0,0.0) {}
     ~edge();
-    edge(vertex a, vertex b) { edge(a.x,a.y,a.z,b.x,b.y,b.z); }
-    edge(double ax, double bx) { edge(ax,0.0,0.0,bx,0.0,0.0); }
-    edge(double ax, double ay, double bx, double by) { edge(ax,ay,0.0,bx,by,0.0); }
+    edge(vertex a, vertex b) : edge(a.x,a.y,a.z,b.x,b.y,b.z) {}
+    edge(double ax, double bx) : edge(ax,0.0,0.0,bx,0.0,0.0) {}
+    edge(double ax, double ay, double bx, double by) : edge(ax,ay,0.0,bx,by,0.0) {}
     edge(double, double, double, double, double, double);
     void setVertices(vertex a, vertex b) { setVertices(a.x,a.y,a.z,b.x,b.y,b.z); }
     void setVertices(double ax, double bx) { setVertices(ax,0.0,0.0,bx,0.0,0.0); }
@@ -44,9 +44,11 @@ class edge {
     void setVertices(double, double, double, double, double, double);
     double getLength();
 
+    int contains(vertex*);
+double length;
   private:
     vertex vertices[2];
-    double length;
+
     class face *faces;
     class body *bodies;
 
@@ -57,9 +59,9 @@ class edge {
 class face {
 
   public:
-    face(vertex a, vertex b, vertex c) { face(a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z); }
+    face(vertex a, vertex b, vertex c) : face(a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z) {}
     face(edge, edge, edge);
-    face(double ax, double ay, double bx, double by, double cx, double cy) { face(ax,ay,0.0,bx,by,0.0,cx,cy,0.0); }
+    face(double ax, double ay, double bx, double by, double cx, double cy) : face(ax,ay,0.0,bx,by,0.0,cx,cy,0.0) {}
     face(double, double, double, double, double, double, double, double, double);
     ~face();
     void setVertices(vertex a, vertex b, vertex c) { setVertices(a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z); }

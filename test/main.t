@@ -30,7 +30,7 @@ void assert_equal(int act, int exp, string message) {
   tests_success++;
 }
 
-void assert_equal(double act, double exp, string message, double precision = 1e-15) {
+void assert_equal(double act, double exp, string message, double precision = EPSILON) {
 
   int success = (fabs(act-exp) < precision);
   cout << (success ? "\033[32m" : "\033[1;31m") << message << " ... " << (success ? "SUCCESS\033[0m" : "FAILED") << "\n";

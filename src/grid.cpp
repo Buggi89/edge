@@ -10,8 +10,7 @@ vertex::vertex(double ax, double ay, double az) {
 
 bool vertex::operator ==(vertex &other) {
 
-  return (fabs(x - other.x) + fabs(y - other.y) + fabs(z - other.z) <
-          (fabs(x)+fabs(other.x)+fabs(y)+fabs(other.y)+fabs(z)+fabs(other.z))*1.e-14 / 6.0);
+  return (dequal(x,other.x) && dequal(y,other.y) && dequal(z,other.z));
 
 }
 
@@ -42,7 +41,19 @@ void edge::setVertices(double ax, double ay, double az, double bx, double by, do
 
 double edge::getLength() {
 
-    return length;
+  return length;
+
+}
+
+int edge::contains(vertex *v) {
+
+  double sp = (vertices[1].x-vertices[0].x)*(v->x-vertices[0].x)+
+              (vertices[1].y-vertices[0].y)*(v->y-vertices[0].y)+
+              (vertices[1].z-vertices[0].z)*(v->z-vertices[0].z);
+
+  edge v_to_v0(*v, vertices[0]);
+
+  return dequal(sp, v_to_v0.getLength() * length);
 
 }
 

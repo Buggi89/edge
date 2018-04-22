@@ -25,9 +25,7 @@ void assert_equal(int act, int exp, string message) {
   if(!success) {
     cout << "Expected [" << exp << "], got [" << act << "]\033[0m\n";
     tests_failed++;
-  }
-
-  tests_success++;
+  } else tests_success++;
 }
 
 void assert_equal(double act, double exp, string message, double precision = EPSILON) {
@@ -38,9 +36,7 @@ void assert_equal(double act, double exp, string message, double precision = EPS
     cout << "Expected [" << exp << "], got [" << act << "], difference ["
          << fabs(act-exp) << "] is bigger than precision [" << precision << "]\033[0m\n";
     tests_failed++;
-  }
-
-  tests_success++;
+  } else tests_success++;
 }
 
 void assert_equal(string act, string exp, string message) {
@@ -50,8 +46,6 @@ void assert_equal(string act, string exp, string message) {
   if(!success) {
     cout << "Expected [" << exp << "], got [" << act << "]\033[0m\n";
     tests_failed++;
-  }
-
-  tests_success++;
+  } else tests_success++;
 
 }

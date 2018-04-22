@@ -20,6 +20,8 @@ class vertex {
 
     bool operator==(vertex &other);
 
+    int in_edge(class edge*);
+
   private:
     class edge *edges;
     class face *faces;
@@ -34,24 +36,26 @@ class edge {
   public:
     edge() : edge(0.0,0.0,0.0,1.0,0.0,0.0) {}
     ~edge();
-    edge(vertex a, vertex b) : edge(a.x,a.y,a.z,b.x,b.y,b.z) {}
+    edge(vertex *a, vertex *b);
     edge(double ax, double bx) : edge(ax,0.0,0.0,bx,0.0,0.0) {}
     edge(double ax, double ay, double bx, double by) : edge(ax,ay,0.0,bx,by,0.0) {}
     edge(double, double, double, double, double, double);
-    void setVertices(vertex a, vertex b) { setVertices(a.x,a.y,a.z,b.x,b.y,b.z); }
+    void setVertices(vertex *a, vertex *b) { setVertices(a->x,a->y,a->z,b->x,b->y,b->z); }
     void setVertices(double ax, double bx) { setVertices(ax,0.0,0.0,bx,0.0,0.0); }
     void setVertices(double ax, double ay, double bx, double by) { setVertices(ax,ay,0.0,bx,by,0.0); }
     void setVertices(double, double, double, double, double, double);
     double getLength();
 
     int contains(vertex*);
-double length;
-  private:
-    vertex vertices[2];
 
+  private:
+    int my_vertices;
+    vertex *vertices[2];
+    double length;
     class face *faces;
     class body *bodies;
 
+    friend double scalarp(edge*, edge*);
     friend void addEdgeToFace(edge*, face*);
 
 };
@@ -71,8 +75,8 @@ class face {
     double getArea();
 
   private:
-    vertex vertices[3];
-    edge edges[3];
+    vertex *vertices[3];
+    edge *edges[3];
     double area;
     class body *bodies;
 
@@ -106,6 +110,8 @@ class grid {
     };
 
 };
+
+double scalarp(edge*, edge*);
 
 void addEdgeToFace(edge*, face*);
 void addFaceToBody(face*, body*);

@@ -26,7 +26,7 @@ edge::edge(vertex *v1, vertex *v2) {
   vertices[1] = v2;
   my_vertices=0;
 
-  setVertices(v1,v2);
+  length = sqrt((v2->x-v1->x)*(v2->x-v1->x) + (v2->y-v1->y)*(v2->y-v1->y) + (v2->z-v1->z)*(v2->z-v1->z));
 
   if(*v1 == *v2) throw new string("Points for edge are identical.");
 
@@ -37,11 +37,11 @@ edge::edge(vertex *v1, vertex *v2) {
 
 edge::edge(double ax, double ay, double az, double bx, double by, double bz) {
 
-  vertices[0] = new vertex();
-  vertices[1] = new vertex();
+  vertices[0] = new vertex(ax,ay,az);
+  vertices[1] = new vertex(bx,by,bz);
   my_vertices= 1;
 
-  setVertices(ax,ay,az,bx,by,bz);
+  length = sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay) + (bz-az)*(bz-az));
 
   if(*vertices[0] == *vertices[1]) throw new string("Points for edge are identical.");
 
@@ -100,16 +100,76 @@ double scalarp(edge *e1, edge *e2) {
 
 }
 
-face::face(double ax, double ay, double az, double bx, double by, double bz, double cx, double cy, double cz) {
+face::face(vertex *v1, vertex *v2, vertex *v3) {
+
+  vertices[0] = v1;
+  vertices[1] = v2;
+  vertices[2] = v3;
+  my_vertices = 0;
+
+  double crx = (v2->y-v1->y)*(v3->z-v1->z) - (v2->z-v1->z)*(v3->y-v1->y);
+  double cry = (v2->z-v1->z)*(v3->x-v1->x) - (v2->x-v1->x)*(v3->z-v1->z);
+  double crz = (v2->x-v1->x)*(v3->y-v1->y) - (v2->y-v1->y)*(v3->x-v1->x);
+  area = 0.5 * sqrt(crx*crx + cry*cry + crz*crz);
+
+  edges[0] = new edge(v1,v2);
+  edges[1] = new edge(v2,v3);
+  edges[2] = new edge(v3,v1);
+  my_edges = 1;
+
+  if( dequal(area, 0.0) ) throw new string("Face has no area. Edges are collinear.");
+
+  bodies = nullptr;
 
 }
 
-face::face(edge a, edge b, edge c) {
+face::face(edge *a, edge *b, edge *c) {
 
+}
 
+face::face(double ax, double ay, double az, double bx, double by, double bz, double cx, double cy, double cz) {
+
+    vertices[0] = new vertex(ax,ay,az);
+    vertices[1] = new vertex(bx,by,bz);
+    vertices[2] = new vertex(cx,cy,cz);
+    my_vertices = 1;
+
+    double crx = (by-ay)*(cz-az) - (bz-az)*(cy-ay);
+    double cry = (bz-az)*(cx-ax) - (bx-ax)*(cz-az);
+    double crz = (bx-ax)*(cy-ay) - (by-ay)*(cx-ax);
+    area = 0.5 * sqrt(crx*crx + cry*cry + crz*crz);
+
+    edges[0] = new edge(vertices[0],vertices[1]);
+    edges[1] = new edge(vertices[1],vertices[2]);
+    edges[2] = new edge(vertices[2],vertices[0]);
+    my_edges = 1;
+
+    if( dequal(area, 0.0) ) throw new string("Face has no area. Edges are collinear.");
+
+    bodies = nullptr;
+
+}
+
+double face::getArea() {
+
+  return area;
 
 }
 
 face::~face() {
+
+  delete[] bodies;
+
+  if(my_vertices) {
+    delete vertices[0];
+    delete vertices[1];
+    delete vertices[2];
+  }
+
+  if(my_edges) {
+    delete edges[0];
+    delete edges[1];
+    delete edges[2];
+  }
 
 }

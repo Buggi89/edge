@@ -63,18 +63,20 @@ class edge {
 class face {
 
   public:
-    face(vertex a, vertex b, vertex c) : face(a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z) {}
-    face(edge, edge, edge);
+    face(vertex*, vertex*, vertex*);
+    face(edge*, edge*, edge*);
     face(double ax, double ay, double bx, double by, double cx, double cy) : face(ax,ay,0.0,bx,by,0.0,cx,cy,0.0) {}
     face(double, double, double, double, double, double, double, double, double);
     ~face();
-    void setVertices(vertex a, vertex b, vertex c) { setVertices(a.x,a.y,a.z,b.x,b.y,b.z,c.x,c.y,c.z); }
+    void setVertices(vertex *a, vertex *b, vertex *c) { setVertices(a->x,a->y,a->z,b->x,b->y,b->z,c->x,c->y,c->z); }
     void setVertices(double ax, double ay, double bx, double by, double cx, double cy) { setVertices(ax,ay,0.0,bx,by,0.0,cx,cy,0.0); }
     void setVertices(double, double, double, double, double, double, double, double, double);
     void setEdges(edge, edge, edge);
     double getArea();
 
   private:
+    int my_vertices;
+    int my_edges;
     vertex *vertices[3];
     edge *edges[3];
     double area;

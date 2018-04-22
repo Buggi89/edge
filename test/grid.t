@@ -36,12 +36,12 @@ void edge_init_fail() {
 void edge_init_success() {
 
   edge cut(1.0,1.0,0.0,4.0,5.0,0.0);
-  assert_equal(cut.getLength(), 5.0, "Length of the edge");
+  assert_equal(cut.getLength(), 5.0, "Length of the edge", EPSILON);
 
   vertex v1(1.0,1.0,0.0);
   vertex v2(4.0,5.0,0.0);
   edge cut2(&v1,&v2);
-  assert_equal(cut2.getLength(), 5.0, "Length of the edge");
+  assert_equal(cut2.getLength(), 5.0, "Length of the edge", EPSILON);
 
 }
 
@@ -49,14 +49,14 @@ void edge_scalar_product() {
 
   edge e1(1.0,1.0,0.0,1.0,2.0,0.0);
   edge e2(1.0,1.0,0.0,2.0,1.0,0.0);
-  assert_equal(scalarp(&e1,&e2), 0.0, "Scalar product of edges 1");
+  assert_equal(scalarp(&e1,&e2), 0.0, "Scalar product of edges 1", EPSILON);
 
   edge e3(1.0,1.0,0.0,1.0,1.5,0.0);
-  assert_equal(scalarp(&e1,&e3), 0.5, "Scalar product of edges 2");
+  assert_equal(scalarp(&e1,&e3), 0.5, "Scalar product of edges 2", EPSILON);
 
   edge e4(3.0,1.5,3.0,2.0,9.5,4.0);
   edge e5(1.0,1.0,0.0,6.0,2.5,4.0);
-  assert_equal(scalarp(&e4,&e5), 11.0, "Scalar product of edges 3");
+  assert_equal(scalarp(&e4,&e5), 11.0, "Scalar product of edges 3", EPSILON);
 
 }
 
@@ -75,7 +75,7 @@ void edge_setVertices() {
 
   edge cut(1.0,1.0,1.0,2.0,2.0,2.0);
   cut.setVertices(1.0,1.0,0.0,4.0,5.0,0.0);
-  assert_equal(cut.getLength(), 5.0, "Reset edge vertices");
+  assert_equal(cut.getLength(), 5.0, "Reset edge vertices", EPSILON);
 
 }
 
@@ -85,7 +85,14 @@ void face_init() {
   vertex v2(2.0,1.0);
   vertex v3(1.0,2.0);
 
-  //face cut(v1,v2,v3);
+  face cut(&v1,&v2,&v3);
+  assert_equal(cut.getArea(), 0.5, "Area of face", EPSILON);
+
+  vertex v4(1.0,1.0);
+  vertex v5(2.0,2.0);
+  vertex v6(-1.5,-1.5);
+
+  assert_fail_message(face cut2(&v4,&v5,&v6), "Face has no area. Edges are collinear.", "Collinear points form no face");
 
 }
 

@@ -8,7 +8,7 @@ void assert_equal(string, string, string);
 #define assert_fail(command, name) do { \
 try {\
   command;\
-} catch { assert_equal(1,1, name); return; }\
+} catch (string *msg) { assert_equal(1,1, name); return; }\
 assert_equal("no exception", "exception", name);\
 } while(0)
 

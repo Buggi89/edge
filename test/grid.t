@@ -2,6 +2,7 @@
 #include <test.h>
 
 #include <grid.h>
+#include <vector.h>
 
 void vertex_compare() {
 
@@ -27,6 +28,18 @@ void vertex_in_edge() {
 
 }
 
+void vertex_plus_vector() {
+
+  vertex v1(1.5,1.5,0.0);
+  vector vec1(1.0,1.0,-4.0);
+
+  vertex v2 = v1 + vec1;
+  assert_equal(v2.x, 2.5, "Vertex + Vector x", EPSILON);
+  assert_equal(v2.y, 2.5, "Vertex + Vector y", EPSILON);
+  assert_equal(v2.z,-4.0, "Vertex + Vector z", EPSILON);
+
+}
+
 void edge_init_fail() {
 
   assert_fail_message(edge cut(1.0,1.0,0.0,1.0,1.0,0.0), "Points for edge are identical.", "Edge initialisation fails");
@@ -42,21 +55,6 @@ void edge_init_success() {
   vertex v2(4.0,5.0,0.0);
   edge cut2(&v1,&v2);
   assert_equal(cut2.getLength(), 5.0, "Length of the edge", EPSILON);
-
-}
-
-void edge_scalar_product() {
-
-  edge e1(1.0,1.0,0.0,1.0,2.0,0.0);
-  edge e2(1.0,1.0,0.0,2.0,1.0,0.0);
-  assert_equal(scalarp(&e1,&e2), 0.0, "Scalar product of edges 1", EPSILON);
-
-  edge e3(1.0,1.0,0.0,1.0,1.5,0.0);
-  assert_equal(scalarp(&e1,&e3), 0.5, "Scalar product of edges 2", EPSILON);
-
-  edge e4(3.0,1.5,3.0,2.0,9.5,4.0);
-  edge e5(1.0,1.0,0.0,6.0,2.5,4.0);
-  assert_equal(scalarp(&e4,&e5), 11.0, "Scalar product of edges 3", EPSILON);
 
 }
 
@@ -95,6 +93,13 @@ void face_init() {
   face cut3(&v7,&v8,&v9);
   assert_equal(cut3.getArea(), 8.62722435085584, "Area of complex face", EPSILON);
 
+  double d1 = cut.distToCircumcenter(&v7);
+  double d2 = cut.distToCircumcenter(&v8);
+  double d3 = cut.distToCircumcenter(&v9);
+
+  assert_equal(d1,d2, "Circumcenter test 1-2", EPSILON);
+  assert_equal(d1,d3, "Circumcenter test 1-3", EPSILON);
+
   vertex v4(1.0,1.0);
   vertex v5(2.0,2.0);
   vertex v6(-1.5,-1.5);
@@ -107,12 +112,12 @@ void grid_tests() {
 
   cout << "Testing class vertex: \n";
   vertex_compare();
+  vertex_plus_vector();
   vertex_in_edge();
   cout << "Testing class edge: \n";
   edge_init_fail();
   edge_init_success();
   edge_setVertices();
-  edge_scalar_product();
   edge_contains();
   cout << "Testing class face: \n";
   face_init();

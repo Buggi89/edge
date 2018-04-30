@@ -1,6 +1,7 @@
 #include <main.h>
 
 #include <vector.h>
+#include <grid.h>
 
 vector::vector(double ax, double ay, double az) {
 
@@ -8,7 +9,23 @@ vector::vector(double ax, double ay, double az) {
 
 }
 
-double vector::operator *(const vector &v2) {
+vector::vector(vertex *v1, vertex *v2) {
+
+  x = v2->x - v1->x;
+  y = v2->y - v1->y;
+  z = v2->z - v1->z;
+
+}
+
+vector::vector(edge *e) {
+
+  x = e->vertices[1]->x - e->vertices[0]->x;
+  y = e->vertices[1]->y - e->vertices[0]->y;
+  z = e->vertices[1]->z - e->vertices[0]->z;
+
+}
+
+double vector::operator ^(const vector &v2) {
 
   return x*v2.x + y*v2.y + z*v2.z;
 

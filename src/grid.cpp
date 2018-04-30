@@ -1,6 +1,7 @@
 #include <main.h>
 
 #include <grid.h>
+#include <vector.h>
 
 vertex::vertex(double ax, double ay, double az) {
 
@@ -8,9 +9,21 @@ vertex::vertex(double ax, double ay, double az) {
 
 }
 
-bool vertex::operator ==(vertex &other) {
+bool vertex::operator ==(const vertex &other) {
 
   return (dequal(x,other.x) && dequal(y,other.y) && dequal(z,other.z));
+
+}
+
+vertex vertex::operator +(const vector &vec) {
+
+  vertex result;
+
+  result.x = x + vec.x;
+  result.y = y + vec.y;
+  result.z = z + vec.z;
+
+  return result;
 
 }
 
@@ -72,11 +85,10 @@ double edge::getLength() {
 
 int edge::contains(vertex *v) {
 
-  edge v_to_v0(vertices[0], v);
+  vector v1(this);
+  vector v2(vertices[0], v);
 
-  double sp = scalarp(this, &v_to_v0);
-
-  return dequal(sp, v_to_v0.getLength() * length);
+return dequal((v1^v2), sqrt(v2^v2) * length);
 
 }
 
@@ -92,29 +104,6 @@ edge::~edge() {
 
 }
 
-double scalarp(edge *e1, edge *e2) {
-
-  return (e1->vertices[1]->x - e1->vertices[0]->x) * (e2->vertices[1]->x - e2->vertices[0]->x) +
-         (e1->vertices[1]->y - e1->vertices[0]->y) * (e2->vertices[1]->y - e2->vertices[0]->y) +
-         (e1->vertices[1]->z - e1->vertices[0]->z) * (e2->vertices[1]->z - e2->vertices[0]->z);
-
-}
-
-edge crossp(edge *e1, edge *e2) {
-
-  vertex *v11 = e1->vertices[0];
-  vertex *v12 = e1->vertices[1];
-  vertex *v21 = e2->vertices[0];
-  vertex *v22 = e2->vertices[1];
-
-  double crx = (v12->y-v11->y)*(v22->z-v21->z) - (v12->z-v11->z)*(v22->y-v21->y);
-  double cry = (v12->z-v11->z)*(v22->x-v21->x) - (v12->x-v11->x)*(v22->z-v21->z);
-  double crz = (v12->x-v11->x)*(v22->y-v21->y) - (v12->y-v11->y)*(v22->x-v21->x);
-
-  return edge(v11->x, v11->y, v11->z, v11->x + crx, v11->y + cry, v11->z + crz);
-
-}
-
 face::face(vertex *v1, vertex *v2, vertex *v3) {
 
   vertices[0] = v1;
@@ -127,12 +116,15 @@ face::face(vertex *v1, vertex *v2, vertex *v3) {
   edges[2] = new edge(v3,v1);
   my_edges = 1;
 
-  try {
-    area = 0.5*crossp(edges[0],edges[1]).getLength();
-  } catch (string *msg) {
-    area = 0.0;
-    throw new string("Face has no area. Edges are collinear.");
-  }
+  vector vec1(v1,v2);
+  vector vec2(v1,v3);
+  vector vec3 = vec1%vec2;
+
+//  circumcenter = v1 + circ_vec;
+
+  area = 0.5 * sqrt(vec3^vec3);
+
+  if(dequal(area,0.0)) throw new string("Face has no area. Edges are collinear.");
 
   bodies = nullptr;
 
@@ -149,10 +141,11 @@ face::face(double ax, double ay, double az, double bx, double by, double bz, dou
     vertices[2] = new vertex(cx,cy,cz);
     my_vertices = 1;
 
-    double crx = (by-ay)*(cz-az) - (bz-az)*(cy-ay);
-    double cry = (bz-az)*(cx-ax) - (bx-ax)*(cz-az);
-    double crz = (bx-ax)*(cy-ay) - (by-ay)*(cx-ax);
-    area = 0.5 * sqrt(crx*crx + cry*cry + crz*crz);
+    vector vec1(vertices[0], vertices[1]);
+    vector vec2(vertices[0], vertices[2]);
+    vector vec3 = vec1%vec2;
+
+    area = 0.5 * sqrt(vec3^vec3);
 
     edges[0] = new edge(vertices[0],vertices[1]);
     edges[1] = new edge(vertices[1],vertices[2]);
@@ -168,6 +161,13 @@ face::face(double ax, double ay, double az, double bx, double by, double bz, dou
 double face::getArea() {
 
   return area;
+
+}
+
+double face::distToCircumcenter(vertex *a) {
+
+  vector vec1(a, &circumcenter);
+  return sqrt(vec1^vec1);
 
 }
 

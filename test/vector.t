@@ -3,17 +3,35 @@
 
 #include <vector.h>
 
+void vector_plus() {
+
+
+
+}
+
+void vector_minus() {
+
+
+
+}
+
+void vector_times_scalar() {
+
+
+
+}
+
 void vector_scalar_product() {
 
   vector v1(1.0,0.0,0.0);
   vector v2(0.0,1.0,0.0);
 
-  assert_equal(v1*v2, 0.0, "Simple scalar product", EPSILON);
+  assert_equal(v1^v2, 0.0, "Simple scalar product", EPSILON);
 
   vector v4( 1.2,4.5, 9.6);
   vector v5(-0.8,2.6,-4.5);
 
-  assert_equal(v4*v5, -32.46, "Complex scalar product", EPSILON);
+  assert_equal(v4^v5, -32.46, "Complex scalar product", EPSILON);
 
 }
 
@@ -40,6 +58,9 @@ void vector_cross_product() {
 void vector_tests() {
 
   cout << "Testing class vector: \n";
+  vector_plus();
+  vector_minus();
+  vector_times_scalar();
   vector_scalar_product();
   vector_cross_product();
 

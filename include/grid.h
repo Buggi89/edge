@@ -6,6 +6,7 @@ class edge;
 class face;
 class body;
 class grid;
+class vector;
 
 class vertex {
 
@@ -18,7 +19,8 @@ class vertex {
     vertex(double ax,double ay) : vertex(ax,ay,0.0) {}
     vertex(double,double,double);
 
-    bool operator==(vertex &other);
+    bool operator==(const vertex &other);
+    vertex operator+(const vector &vec);
 
     int in_edge(class edge*);
 
@@ -56,9 +58,6 @@ class edge {
     class body *bodies;
 
     friend class vector;
-
-    friend double scalarp(edge*, edge*);
-    friend edge crossp(edge*, edge*);
     friend void addEdgeToFace(edge*, face*);
 
 };
@@ -76,11 +75,13 @@ class face {
     void setVertices(double, double, double, double, double, double, double, double, double);
     void setEdges(edge, edge, edge);
     double getArea();
+    double distToCircumcenter(vertex *a);
 
   private:
     int my_vertices;
     int my_edges;
     vertex *vertices[3];
+    vertex circumcenter;
     edge *edges[3];
     double area;
     class body *bodies;

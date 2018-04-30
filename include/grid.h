@@ -55,7 +55,10 @@ class edge {
     class face *faces;
     class body *bodies;
 
+    friend class vector;
+
     friend double scalarp(edge*, edge*);
+    friend edge crossp(edge*, edge*);
     friend void addEdgeToFace(edge*, face*);
 
 };
@@ -114,6 +117,7 @@ class grid {
 };
 
 double scalarp(edge*, edge*);
+edge crossp(edge*, edge*);
 
 void addEdgeToFace(edge*, face*);
 void addFaceToBody(face*, body*);

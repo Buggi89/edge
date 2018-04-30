@@ -43,10 +43,10 @@ edge::edge(double ax, double ay, double az, double bx, double by, double bz) {
 
   length = sqrt((bx-ax)*(bx-ax) + (by-ay)*(by-ay) + (bz-az)*(bz-az));
 
-  if(*vertices[0] == *vertices[1]) throw new string("Points for edge are identical.");
-
   bodies = nullptr;
   faces  = nullptr;
+
+  if(*vertices[0] == *vertices[1]) throw new string("Points for edge are identical.");
 
 }
 
@@ -100,6 +100,21 @@ double scalarp(edge *e1, edge *e2) {
 
 }
 
+edge crossp(edge *e1, edge *e2) {
+
+  vertex *v11 = e1->vertices[0];
+  vertex *v12 = e1->vertices[1];
+  vertex *v21 = e2->vertices[0];
+  vertex *v22 = e2->vertices[1];
+
+  double crx = (v12->y-v11->y)*(v22->z-v21->z) - (v12->z-v11->z)*(v22->y-v21->y);
+  double cry = (v12->z-v11->z)*(v22->x-v21->x) - (v12->x-v11->x)*(v22->z-v21->z);
+  double crz = (v12->x-v11->x)*(v22->y-v21->y) - (v12->y-v11->y)*(v22->x-v21->x);
+
+  return edge(v11->x, v11->y, v11->z, v11->x + crx, v11->y + cry, v11->z + crz);
+
+}
+
 face::face(vertex *v1, vertex *v2, vertex *v3) {
 
   vertices[0] = v1;
@@ -107,17 +122,17 @@ face::face(vertex *v1, vertex *v2, vertex *v3) {
   vertices[2] = v3;
   my_vertices = 0;
 
-  double crx = (v2->y-v1->y)*(v3->z-v1->z) - (v2->z-v1->z)*(v3->y-v1->y);
-  double cry = (v2->z-v1->z)*(v3->x-v1->x) - (v2->x-v1->x)*(v3->z-v1->z);
-  double crz = (v2->x-v1->x)*(v3->y-v1->y) - (v2->y-v1->y)*(v3->x-v1->x);
-  area = 0.5 * sqrt(crx*crx + cry*cry + crz*crz);
-
   edges[0] = new edge(v1,v2);
   edges[1] = new edge(v2,v3);
   edges[2] = new edge(v3,v1);
   my_edges = 1;
 
-  if( dequal(area, 0.0) ) throw new string("Face has no area. Edges are collinear.");
+  try {
+    area = 0.5*crossp(edges[0],edges[1]).getLength();
+  } catch (string *msg) {
+    area = 0.0;
+    throw new string("Face has no area. Edges are collinear.");
+  }
 
   bodies = nullptr;
 

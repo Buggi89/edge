@@ -86,7 +86,14 @@ void face_init() {
   vertex v3(1.0,2.0);
 
   face cut(&v1,&v2,&v3);
-  assert_equal(cut.getArea(), 0.5, "Area of face", EPSILON);
+  assert_equal(cut.getArea(), 0.5, "Area of 2D face", EPSILON);
+
+  vertex v7( 1.2,0.8,2.4);
+  vertex v8(-7.6,2.3,8.4);
+  vertex v9(-3.4,0.0,5.8);
+
+  face cut3(&v7,&v8,&v9);
+  assert_equal(cut3.getArea(), 8.62722435085584, "Area of complex face", EPSILON);
 
   vertex v4(1.0,1.0);
   vertex v5(2.0,2.0);

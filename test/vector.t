@@ -5,19 +5,41 @@
 
 void vector_plus() {
 
+  vector v1( 1.2,4.5, 9.6);
+  vector v2(-0.8,2.6,-4.5);
+  vector v3 = v1+v2;
 
-
+  assert_equal(v3.x, 0.4, "Vector plus - x", EPSILON);
+  assert_equal(v3.y, 7.1, "Vector plus - y", EPSILON);
+  assert_equal(v3.z, 5.1, "Vector plus - z", EPSILON);
 }
 
 void vector_minus() {
 
+  vector v1( 1.2,4.5, 9.6);
+  vector v2(-0.8,2.6,-4.5);
+  vector v3 = v1-v2;
 
+  assert_equal(v3.x, 2.0, "Vector minus - x", EPSILON);
+  assert_equal(v3.y, 1.9, "Vector minus - y", EPSILON);
+  assert_equal(v3.z,14.1, "Vector minus - z", EPSILON);
 
 }
 
 void vector_times_scalar() {
 
+  vector v1( 1.2,4.5, 9.6);
+  vector v2 = 2.5*v1;
 
+  assert_equal(v2.x, 3.0 , "Vector scalar multiplication - x", EPSILON);
+  assert_equal(v2.y,11.25, "Vector scalar multiplication - y", EPSILON);
+  assert_equal(v2.z,24.0,  "Vector scalar multiplication - z", EPSILON);
+
+  vector v3 = v1*2.5;
+
+  assert_equal(v3.x, 3.0 , "Vector scalar multiplication - x", EPSILON);
+  assert_equal(v3.y,11.25, "Vector scalar multiplication - y", EPSILON);
+  assert_equal(v3.z,24.0,  "Vector scalar multiplication - z", EPSILON);
 
 }
 

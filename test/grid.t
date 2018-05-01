@@ -90,12 +90,12 @@ void face_init() {
   vertex v8(-7.6,2.3,8.4);
   vertex v9(-3.4,0.0,5.8);
 
-  face cut3(&v7,&v8,&v9);
-  assert_equal(cut3.getArea(), 8.62722435085584, "Area of complex face", EPSILON);
+  face cut2(&v7,&v8,&v9);
+  assert_equal(cut2.getArea(), 8.62722435085584, "Area of complex face", EPSILON);
 
-  double d1 = cut.distToCircumcenter(&v7);
-  double d2 = cut.distToCircumcenter(&v8);
-  double d3 = cut.distToCircumcenter(&v9);
+  double d1 = cut2.distToCircumcenter(&v7);
+  double d2 = cut2.distToCircumcenter(&v8);
+  double d3 = cut2.distToCircumcenter(&v9);
 
   assert_equal(d1,d2, "Circumcenter test 1-2", EPSILON);
   assert_equal(d1,d3, "Circumcenter test 1-3", EPSILON);
@@ -104,7 +104,7 @@ void face_init() {
   vertex v5(2.0,2.0);
   vertex v6(-1.5,-1.5);
 
-  assert_fail_message(face cut2(&v4,&v5,&v6), "Face has no area. Edges are collinear.", "Collinear points form no face");
+  assert_fail_message(face cut3(&v4,&v5,&v6), "Face has no area. Edges are collinear.", "Collinear points form no face");
 
 }
 

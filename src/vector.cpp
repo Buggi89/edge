@@ -25,6 +25,42 @@ vector::vector(edge *e) {
 
 }
 
+vector vector::operator +(const vector &v2) {
+
+  vector result;
+
+  result.x = x + v2.x;
+  result.y = y + v2.y;
+  result.z = z + v2.z;
+
+  return result;
+
+}
+
+vector vector::operator -(const vector &v2) {
+
+  vector result;
+
+  result.x = x - v2.x;
+  result.y = y - v2.y;
+  result.z = z - v2.z;
+
+  return result;
+
+}
+
+vector operator *(const double &a, const vector &vec) {
+
+  vector result;
+
+  result.x = a*vec.x;
+  result.y = a*vec.y;
+  result.z = a*vec.z;
+
+  return result;
+
+}
+
 double vector::operator ^(const vector &v2) {
 
   return x*v2.x + y*v2.y + z*v2.z;

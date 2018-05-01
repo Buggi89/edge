@@ -14,10 +14,15 @@ class vector {
     vector(edge *e);
     vector(vertex *v1, vertex *v2);
 
+    vector operator+(const vector&);
+    vector operator-(const vector&);
     double operator^(const vector&);
     vector operator%(const vector&);
 
     double x,y,z;
+
+    friend vector operator *(const double&, const vector&);
+    friend vector operator *(const vector &vec, const double &a) { return a*vec; }
 };
 
 #endif // VECTOR_H

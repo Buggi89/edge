@@ -7,6 +7,10 @@ vertex::vertex(double ax, double ay, double az) {
 
   x=ax; y=ay; z=az;
 
+  edges  = nullptr;
+  bodies = nullptr;
+  faces  = nullptr;
+
 }
 
 bool vertex::operator ==(const vertex &other) {
@@ -120,7 +124,7 @@ face::face(vertex *v1, vertex *v2, vertex *v3) {
   vector vec2(v1,v3);
   vector vec3 = vec1%vec2;
 
-//  circumcenter = v1 + circ_vec;
+  circumcenter = *v1 + ((((vec1^vec1) * vec2) - ((vec2^vec2) * vec1)) % (vec3) ) * (1.0 / (2.0*((vec3)^(vec3))));
 
   area = 0.5 * sqrt(vec3^vec3);
 
@@ -144,6 +148,8 @@ face::face(double ax, double ay, double az, double bx, double by, double bz, dou
     vector vec1(vertices[0], vertices[1]);
     vector vec2(vertices[0], vertices[2]);
     vector vec3 = vec1%vec2;
+
+    circumcenter = *vertices[0] + ((((vec1^vec1) * vec2) - ((vec2^vec2) * vec1)) % (vec3) ) * (1.0 / (2.0*((vec3)^(vec3))));
 
     area = 0.5 * sqrt(vec3^vec3);
 

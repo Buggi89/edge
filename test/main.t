@@ -3,6 +3,7 @@
 
 void field_tests();
 void grid_tests();
+void monomial_tests();
 void vector_tests();
 
 int tests_success = 0;
@@ -13,6 +14,7 @@ int main() {
   field_tests();
   grid_tests();
   vector_tests();
+  monomial_tests();
 
   cout << "\033[1;30mRan tests       : " << tests_success + tests_failed << "\n";
   cout << "\033[1;30mFailed tests    : \033[1;31m" << tests_failed << "\n";

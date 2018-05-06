@@ -16,6 +16,8 @@ class monomial {
     double value_at(double, double);
     double value_at(double, double, double);
 
+    monomial operator *(const monomial& other);
+
   private:
     int d;
     double coeff;

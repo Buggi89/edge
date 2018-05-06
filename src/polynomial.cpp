@@ -19,6 +19,20 @@ monomial::~monomial() {
 
 }
 
+monomial monomial::operator *(const monomial& other) {
+
+  int exp1=0, exp2=0, exp3=0;
+  if(d>0)       exp1 += exp[0];
+  if(other.d>0) exp1 += other.exp[0];
+  if(d>1)       exp2 += exp[1];
+  if(other.d>1) exp2 += other.exp[1];
+  if(d>2)       exp3 += exp[2];
+  if(other.d>2) exp3 += other.exp[2];
+  monomial result(imax(d,other.d), coeff * other.coeff, exp1, exp2, exp3);
+  return result;
+
+}
+
 double monomial::value_at(void) {
 
   if(d!=0) throw "Number of given coordinates (0) and variables in monomial does not match.";

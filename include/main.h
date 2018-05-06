@@ -12,5 +12,6 @@ using namespace std;
 
 #define EPSILON 1.e-14
 #define dequal(a,b) (fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * EPSILON))
+#define imax(a,b) ((a>b)?a:b)
 
 #endif // MAIN_H

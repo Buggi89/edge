@@ -18,8 +18,10 @@ class monomial {
     double value_at(double, double);
     double value_at(double, double, double);
 
-    polynomial operator +(const monomial& other);
-    monomial operator *(const monomial& other);
+    polynomial operator +(const monomial&);
+    polynomial operator +(const polynomial&);
+    monomial operator *(const monomial&);
+    void operator *=(const double&);
 
   private:
     int n;
@@ -28,6 +30,8 @@ class monomial {
     int *exp;
 
   friend class polynomial;
+  friend monomial operator *(const double&, const monomial&);
+  friend monomial operator *(const monomial& m, const double& a) { return a*m; }
 
 };
 
@@ -35,7 +39,7 @@ class polynomial {
 
   public:
     polynomial();
-    polynomial(monomial *mo);
+    polynomial(const monomial& mo);
     polynomial(const polynomial& p);
     ~polynomial();
 
@@ -43,10 +47,12 @@ class polynomial {
     double value_at(void);
     double value_at(double);
     double value_at(double, double);
+    double value_at(double,double,double);
     double get_coeff(int,int,int);
     void simplify();
 
     polynomial operator +(const monomial& other);
+    polynomial operator +(const polynomial& other);
 
   private:
     struct monomial_list {
@@ -57,6 +63,9 @@ class polynomial {
     int n;
     int d;
     int nm;
+
+  friend polynomial operator *(const double&, const polynomial&);
+  friend polynomial operator *(const polynomial& p, const double& a) { return a*p; }
 
 };
 

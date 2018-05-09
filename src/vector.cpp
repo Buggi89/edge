@@ -61,19 +61,19 @@ vector operator *(const double &a, const vector &vec) {
 
 }
 
-double vector::operator ^(const vector &v2) {
+double dot(const vector &v1, const vector &v2) {
 
-  return x*v2.x + y*v2.y + z*v2.z;
+  return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 
 }
 
-vector vector::operator %(const vector &v2) {
+vector cross(const vector &v1, const vector &v2) {
 
   vector result;
 
-  result.x = y*v2.z - z*v2.y;
-  result.y = z*v2.x - x*v2.z;
-  result.z = x*v2.y - y*v2.x;
+  result.x = v1.y*v2.z - v1.z*v2.y;
+  result.y = v1.z*v2.x - v1.x*v2.z;
+  result.z = v1.x*v2.y - v1.y*v2.x;
 
   return result;
 

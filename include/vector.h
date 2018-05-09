@@ -16,13 +16,13 @@ class vector {
 
     vector operator+(const vector&);
     vector operator-(const vector&);
-    double operator^(const vector&);
-    vector operator%(const vector&);
 
     double x,y,z;
 
     friend vector operator *(const double&, const vector&);
     friend vector operator *(const vector &vec, const double &a) { return a*vec; }
+    friend double dot(const vector&, const vector&);
+    friend vector cross(const vector&, const vector&);
 };
 
 #endif // VECTOR_H

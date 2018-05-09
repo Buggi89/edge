@@ -15,6 +15,6 @@ void field_tests() {
 void scalar_field_init() {
 
   scalar_field cut("psi");
-  assert_equal(cut.name, "psi", "Name of the scalar field");
+  assert_equal_s(cut.name, "psi", "Name of the scalar field");
 
 }

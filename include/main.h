@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <stdlib.h>
+#include <typeinfo>
 
 using namespace std;
 

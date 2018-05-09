@@ -92,7 +92,7 @@ int edge::contains(vertex *v) {
   vector v1(this);
   vector v2(vertices[0], v);
 
-return dequal((v1^v2), sqrt(v2^v2) * length);
+return dequal(dot(v1,v2), sqrt(dot(v2,v2)) * length);
 
 }
 
@@ -122,11 +122,11 @@ face::face(vertex *v1, vertex *v2, vertex *v3) {
 
   vector vec1(v1,v2);
   vector vec2(v1,v3);
-  vector vec3 = vec1%vec2;
+  vector vec3 = cross(vec1,vec2);
 
-  circumcenter = *v1 + ((((vec1^vec1) * vec2) - ((vec2^vec2) * vec1)) % (vec3) ) * (1.0 / (2.0*((vec3)^(vec3))));
+  circumcenter = *v1 + cross((dot(vec1,vec1) * vec2) - (dot(vec2,vec2) * vec1) , vec3 ) * (1.0 / (2.0*(dot(vec3,vec3))));
 
-  area = 0.5 * sqrt(vec3^vec3);
+  area = 0.5 * sqrt(dot(vec3,vec3));
 
   if(dequal(area,0.0)) throw new string("Face has no area. Edges are collinear.");
 
@@ -147,11 +147,11 @@ face::face(double ax, double ay, double az, double bx, double by, double bz, dou
 
     vector vec1(vertices[0], vertices[1]);
     vector vec2(vertices[0], vertices[2]);
-    vector vec3 = vec1%vec2;
+    vector vec3 = cross(vec1,vec2);
 
-    circumcenter = *vertices[0] + ((((vec1^vec1) * vec2) - ((vec2^vec2) * vec1)) % (vec3) ) * (1.0 / (2.0*((vec3)^(vec3))));
+    circumcenter = *vertices[0] + cross((dot(vec1,vec1) * vec2) - (dot(vec2,vec2) * vec1) , vec3 ) * (1.0 / (2.0*(dot(vec3,vec3))));
 
-    area = 0.5 * sqrt(vec3^vec3);
+    area = 0.5 * sqrt(dot(vec3,vec3));
 
     edges[0] = new edge(vertices[0],vertices[1]);
     edges[1] = new edge(vertices[1],vertices[2]);
@@ -173,7 +173,7 @@ double face::getArea() {
 double face::distToCircumcenter(vertex *a) {
 
   vector vec1(a, &circumcenter);
-  return sqrt(vec1^vec1);
+  return sqrt(dot(vec1,vec1));
 
 }
 

@@ -32,10 +32,30 @@ monomial monomial::operator *(const monomial& other) {
 
 }
 
+void monomial::operator *=(const double& a) {
+
+  coeff *= a;
+
+}
+
+monomial operator*(const double& a, const monomial& m) {
+
+  return monomial(m.d, m.coeff * a, m.exp[0], m.exp[1], m.exp[2]);
+
+}
+
 polynomial monomial::operator +(const monomial& other) {
 
-  polynomial result(this);
+  polynomial result = *this;
   result.add_monomial(other);
+  return result;
+
+}
+
+polynomial monomial::operator +(const polynomial& p) {
+
+  polynomial result = p;
+  result.add_monomial(*this);
   return result;
 
 }
@@ -81,16 +101,16 @@ polynomial::polynomial() {
 
 }
 
-polynomial::polynomial(monomial *mo) {
+polynomial::polynomial(const monomial &mo) {
 
-  n = mo->n;
-  d = mo->d;
+  n = mo.n;
+  d = mo.d;
   nm= 1;
 
   ml = new monomial_list;
   ml->next = nullptr;
   ml->prev = nullptr;
-  ml->m    = new monomial(mo->d, mo->coeff, mo->exp[0], mo->exp[1], mo->exp[2]);
+  ml->m    = new monomial(mo.d, mo.coeff, mo.exp[0], mo.exp[1], mo.exp[2]);
 
 }
 
@@ -147,13 +167,37 @@ polynomial polynomial::operator +(const monomial &mo) {
 
 }
 
+polynomial polynomial::operator +(const polynomial &p) {
+
+  polynomial result = *this;
+  monomial_list *tmp = p.ml;
+  while(tmp != nullptr) {
+    result.add_monomial(*tmp->m);
+    tmp = tmp->next;
+  }
+  return result;
+
+}
+
+polynomial operator *(const double &a, const polynomial &p) {
+
+  polynomial result = p;
+  polynomial::monomial_list *tmp = result.ml;
+  while(tmp != nullptr) {
+    *tmp->m *= a;
+    tmp = tmp->next;
+  }
+  return result;
+
+}
+
 double polynomial::value_at() {
 
   double result = 0.0;
   monomial_list *tmp = ml;
   while(tmp != nullptr) {
     result += tmp->m->value_at();
-    tmp = ml->next;
+    tmp = tmp->next;
   }
   return result;
 
@@ -177,6 +221,18 @@ double polynomial::value_at(double x, double y) {
   monomial_list *tmp = ml;
   while(tmp != nullptr) {
     result += tmp->m->value_at(x,y);
+    tmp = tmp->next;
+  }
+  return result;
+
+}
+
+double polynomial::value_at(double x, double y, double z) {
+
+  double result = 0.0;
+  monomial_list *tmp = ml;
+  while(tmp != nullptr) {
+    result += tmp->m->value_at(x,y,z);
     tmp = tmp->next;
   }
   return result;

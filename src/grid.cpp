@@ -45,10 +45,13 @@ edge::edge(vertex *v1, vertex *v2) {
 
   length = sqrt((v2->x-v1->x)*(v2->x-v1->x) + (v2->y-v1->y)*(v2->y-v1->y) + (v2->z-v1->z)*(v2->z-v1->z));
 
-  if(*v1 == *v2) throw new string("Points for edge are identical.");
-
   bodies = nullptr;
   faces  = nullptr;
+
+  if(*v1 == *v2) {
+    cleanup();
+    throw new string("Points for edge are identical.");
+  }
 
 }
 
@@ -63,7 +66,10 @@ edge::edge(double ax, double ay, double az, double bx, double by, double bz) {
   bodies = nullptr;
   faces  = nullptr;
 
-  if(*vertices[0] == *vertices[1]) throw new string("Points for edge are identical.");
+  if(*vertices[0] == *vertices[1]) {
+    cleanup();
+    throw new string("Points for edge are identical.");
+  }
 
 }
 
@@ -96,7 +102,7 @@ return dequal(dot(v1,v2), sqrt(dot(v2,v2)) * length);
 
 }
 
-edge::~edge() {
+void edge::cleanup() {
 
   delete[] bodies;
   delete[] faces;
@@ -108,7 +114,21 @@ edge::~edge() {
 
 }
 
+edge::~edge() {
+
+  cleanup();
+
+}
+
 face::face(vertex *v1, vertex *v2, vertex *v3) {
+
+  vector vec1(v1,v2);
+  vector vec2(v1,v3);
+  vector vec3 = cross(vec1,vec2);
+
+  circumcenter = *v1 + cross((dot(vec1,vec1) * vec2) - (dot(vec2,vec2) * vec1) , vec3 ) * (1.0 / (2.0*(dot(vec3,vec3))));
+
+  area = 0.5 * sqrt(dot(vec3,vec3));
 
   vertices[0] = v1;
   vertices[1] = v2;
@@ -120,17 +140,12 @@ face::face(vertex *v1, vertex *v2, vertex *v3) {
   edges[2] = new edge(v3,v1);
   my_edges = 1;
 
-  vector vec1(v1,v2);
-  vector vec2(v1,v3);
-  vector vec3 = cross(vec1,vec2);
-
-  circumcenter = *v1 + cross((dot(vec1,vec1) * vec2) - (dot(vec2,vec2) * vec1) , vec3 ) * (1.0 / (2.0*(dot(vec3,vec3))));
-
-  area = 0.5 * sqrt(dot(vec3,vec3));
-
-  if(dequal(area,0.0)) throw new string("Face has no area. Edges are collinear.");
-
   bodies = nullptr;
+
+  if(dequal(area,0.0)) {
+    cleanup();
+    throw new string("Face has no area. Edges are collinear.");
+  }
 
 }
 
@@ -158,9 +173,12 @@ face::face(double ax, double ay, double az, double bx, double by, double bz, dou
     edges[2] = new edge(vertices[2],vertices[0]);
     my_edges = 1;
 
-    if( dequal(area, 0.0) ) throw new string("Face has no area. Edges are collinear.");
-
     bodies = nullptr;
+
+    if( dequal(area, 0.0) ) {
+      cleanup();
+      throw new string("Face has no area. Edges are collinear.");
+    }
 
 }
 
@@ -177,7 +195,7 @@ double face::distToCircumcenter(vertex *a) {
 
 }
 
-face::~face() {
+void face::cleanup() {
 
   delete[] bodies;
 
@@ -192,5 +210,11 @@ face::~face() {
     delete edges[1];
     delete edges[2];
   }
+
+}
+
+face::~face() {
+
+  cleanup();
 
 }

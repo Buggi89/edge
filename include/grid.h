@@ -57,8 +57,10 @@ class edge {
     class face *faces;
     class body *bodies;
 
-    friend class vector;
-    friend void addEdgeToFace(edge*, face*);
+    void cleanup();
+
+  friend class vector;
+  friend void addEdgeToFace(edge*, face*);
 
 };
 
@@ -85,6 +87,8 @@ class face {
     edge *edges[3];
     double area;
     class body *bodies;
+
+    void cleanup();
 
     friend void addEdgeToFace(edge*, face*);
     friend void addFaceToBody(face*, body*);

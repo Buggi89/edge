@@ -24,14 +24,14 @@ void f_assert_equal_s(string, string, string, int line, const string file);
 #define assert_fail(command, name) do { \
 try {\
   command;\
-} catch (string *msg) { f_assert_equal_i(1,1, name,__LINE__,__FILE__); break; }\
+} catch (string *msg) { f_assert_equal_i(1,1, name,__LINE__,__FILE__); delete msg; break; }\
 f_assert_equal_s("no exception", "exception", name,__LINE__,__FILE__);\
 } while(0)
 
 #define assert_fail_message(command, message, name) do { \
 try {\
   command;\
-} catch (string *msg) { f_assert_equal_s(*msg, message, name,__LINE__,__FILE__); break; }\
+} catch (string *msg) { f_assert_equal_s(*msg, message, name,__LINE__,__FILE__); delete msg; break; }\
 f_assert_equal_s("no exception", "exception", name, __LINE__,__FILE__);\
 } while(0)
 

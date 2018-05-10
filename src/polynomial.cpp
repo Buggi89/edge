@@ -38,9 +38,28 @@ void monomial::operator *=(const double& a) {
 
 }
 
+void monomial::operator *=(const monomial& m) {
+
+  d = imax(d, m.d);
+  n = n + m.n;
+
+  coeff = coeff * m.coeff;
+  exp[0]= exp[0] + m.exp[0];
+  exp[1]= exp[1] + m.exp[1];
+  exp[2]= exp[2] + m.exp[2];
+
+}
+
 monomial operator*(const double& a, const monomial& m) {
 
   return monomial(m.d, m.coeff * a, m.exp[0], m.exp[1], m.exp[2]);
+
+}
+
+polynomial monomial::operator *(const polynomial& p) {
+
+  polynomial result = p;
+  return result * *this;
 
 }
 
@@ -179,6 +198,26 @@ polynomial polynomial::operator +(const polynomial &p) {
 
 }
 
+polynomial polynomial::operator -(const monomial &mo) {
+
+  polynomial result = *this;
+  result.add_monomial((-1.0) * mo);
+  return result;
+
+}
+
+polynomial polynomial::operator -(const polynomial &p) {
+
+  polynomial result = *this;
+  monomial_list *tmp = p.ml;
+  while(tmp != nullptr) {
+    result.add_monomial((-1.0) * *tmp->m);
+    tmp = tmp->next;
+  }
+  return result;
+
+}
+
 polynomial operator *(const double &a, const polynomial &p) {
 
   polynomial result = p;
@@ -186,6 +225,35 @@ polynomial operator *(const double &a, const polynomial &p) {
   while(tmp != nullptr) {
     *tmp->m *= a;
     tmp = tmp->next;
+  }
+  return result;
+
+}
+
+polynomial polynomial::operator *(const monomial &m) {
+
+  polynomial result = *this;
+  polynomial::monomial_list *tmp  = result.ml;
+  while(tmp != nullptr) {
+    *tmp->m *= m;
+    tmp = tmp->next;
+  }
+  return result;
+
+}
+
+polynomial polynomial::operator *(const polynomial &p) {
+
+  polynomial result;
+  polynomial::monomial_list *tmp  = ml;
+  polynomial::monomial_list *ptmp = p.ml;
+  while(ptmp != nullptr) {
+    tmp  = ml;
+    while(tmp != nullptr) {
+      result.add_monomial(*ptmp->m * *tmp->m);
+      tmp = tmp->next;
+    }
+    ptmp = ptmp->next;
   }
   return result;
 

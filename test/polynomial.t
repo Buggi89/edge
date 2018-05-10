@@ -26,6 +26,9 @@ void monomial_init() {
 
   assert_fail_message(monomial mo7(4,1.0,1,1);, "Monomial dimension higher than 3 is invalid.", "Monomial dimension > 3");
 
+  monomial mo8(3,1.0,0,0,3);
+  assert_equal_d(mo8.value_at(0.0,0.0,1.0), 1.0,"Check expression 0^0");
+
 }
 
 void monomial_multiply() {
@@ -89,6 +92,12 @@ void polynomial_add() {
   polynomial p5 = p3 + p4;
   assert_equal_d(p5.value_at(2.5,3.0,4.0), -305.25, "Polynomial + Polynomial = Polynomial");
 
+  polynomial p6 = p5 - p4;
+  assert_equal_d(p6.value_at(2.5,3.0,4.0), -24.0, "Polynomial - Polynomial = Polynomial");
+
+  polynomial p7 = p6 - mo4;
+  assert_equal_d(p7.value_at(2.5,3.0,1.0), 96.0, "Polynomial - Monomial = Polynomial");
+
 }
 
 void polynomial_multiply() {
@@ -98,6 +107,32 @@ void polynomial_multiply() {
   polynomial p3 = p2 * (-2.5);
   assert_equal_d(p2.value_at(2.5,3.0,4.0), -1406.25, "scalar * Polynomial = Polynomial");
   assert_equal_d(p3.value_at(2.5,3.0,4.0), 3515.625, "Polynomial * scalar = Polynomial");
+
+  polynomial p4 = monomial(2,1.0,0,2) + monomial(1,-2.0,1) + monomial(0,1.0);
+  polynomial p5 = p4 * monomial(2,1.0,1,2);
+  polynomial p6 = monomial(2,1.0,1,2) * p4;
+  assert_equal_d(p5.value_at(2.0,2.0,0.0),  8.0, "Polynomial * Monomial = Polynomial - 2");
+  assert_equal_d(p6.value_at(2.0,2.0,2.0),  8.0, "Monomial * Polynomial = Polynomial - 3");
+
+  polynomial p7 = monomial(2,1.0,0,2) + monomial(1,-2.0,1)     + monomial(0,1.0);
+  polynomial p8 = monomial(2,2.0,2,1) + monomial(3,-2.0,0,1,1) + monomial(0,1.0);
+  polynomial p9 = p7 * p8;
+
+  assert_equal_d(p9.value_at(2.75,0.0 ,0.0), -4.5, "Polynomial * Polynomial = Polynomial - 1");
+  assert_equal_d(p9.value_at(1.75,-0.19,0.0), 0.403463625, "Polynomial * Polynomial = Polynomial - 2");
+  assert_equal_d(p9.value_at(0.75,-0.51,0.1), -0.126727175, "Polynomial * Polynomial = Polynomial - 3");
+
+}
+
+void polynomial_complex() {
+
+ polynomial p1 = 9.0 * monomial(3,5.0,2,3,2) + monomial(3,-1.0,1,0,1) + 5.0 * monomial(2,-4.0,2,2) + monomial(0,10.0);
+ polynomial p2 = -0.9 * monomial(3,5.0,5,1,3) + monomial(0,10.0) + 10.0 * p1;
+ polynomial p3 = p1 * p2;
+
+ assert_equal_dp(p3.value_at(0.15,-0.56, 0.2), 1062.888869011344, "Polynomial complex - 1", 1e-12);
+ assert_equal_dp(p3.value_at(-0.9, 0.39,-0.1), 632.3190417794848, "Polynomial complex - 2", 1e-12);
+ assert_equal_dp(p3.value_at(0.2,0.53,-0.95),  1143.933154399575, "Polynomial complex - 3", 1e-12);
 
 }
 
@@ -115,5 +150,6 @@ void polynomial_tests() {
   polynomial_init();
   polynomial_add();
   polynomial_multiply();
+  polynomial_complex();
 
 }

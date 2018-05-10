@@ -21,7 +21,9 @@ class monomial {
     polynomial operator +(const monomial&);
     polynomial operator +(const polynomial&);
     monomial operator *(const monomial&);
+    polynomial operator *(const polynomial&);
     void operator *=(const double&);
+    void operator *=(const monomial&);
 
   private:
     int n;
@@ -53,6 +55,10 @@ class polynomial {
 
     polynomial operator +(const monomial& other);
     polynomial operator +(const polynomial& other);
+    polynomial operator -(const monomial& other);
+    polynomial operator -(const polynomial& other);
+    polynomial operator *(const monomial& other);
+    polynomial operator *(const polynomial& other);
 
   private:
     struct monomial_list {

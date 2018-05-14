@@ -39,11 +39,11 @@ void f_assert_equal_i(int act, int exp, string message, int line, const string f
 
 void f_assert_equal_d(double act, double exp, string message, double precision, int line, const string file) {
 
-  int success = (fabs(act-exp) < precision);
+  int success = dpequal(act,exp,precision);
   cout << (success ? "\033[32m" : "\033[1;31m") << message << " ... " << (success ? "SUCCESS\033[0m" : "FAILED") << "\n";
   if(!success) {
-    cout << "Expected [" << exp << "], got [" << act << "], difference ["
-         << fabs(act-exp) << "] is bigger than precision [" << precision  << "] in " << file << ", line " << line << "\033[0m\n";
+    cout << "Expected [" << exp << "], got [" << act << "], relative error ["
+         << fabs((act-exp)/(fabs(exp)<fabs(act)?fabs(act):fabs(exp))) << "] is bigger than precision [" << precision  << "] in " << file << ", line " << line << "\033[0m\n";
     tests_failed++;
   } else tests_success++;
 

@@ -66,7 +66,7 @@ void polynomial_init() {
 
   monomial mo2(1,2.0,2);
   polynomial p2 = mo2;
-  assert_fail_message(p2.value_at(), "Number of given coordinates (0) is lower than variables in monomial.", "Polynomial from monomial - 0D");
+  assert_fail_message(p2.value_at(), "Number of given coordinates (0) is lower than variables in polynomial.", "Polynomial from monomial - 0D");
   assert_equal_d(p2.value_at(2.5), 12.5, "Polynomial from monomial - 1D");
   assert_equal_d(p2.value_at(2.5,1.0), 12.5, "Polynomial from monomial - 2D");
   assert_equal_d(p2.value_at(2.5,1.0,2.0), 12.5, "Polynomial from monomial - 3D");
@@ -130,9 +130,31 @@ void polynomial_complex() {
  polynomial p2 = -0.9 * monomial(3,5.0,5,1,3) + monomial(0,10.0) + 10.0 * p1;
  polynomial p3 = p1 * p2;
 
- assert_equal_dp(p3.value_at(0.15,-0.56, 0.2), 1062.888869011344, "Polynomial complex - 1", 1e-12);
- assert_equal_dp(p3.value_at(-0.9, 0.39,-0.1), 632.3190417794848, "Polynomial complex - 2", 1e-12);
- assert_equal_dp(p3.value_at(0.2,0.53,-0.95),  1143.933154399575, "Polynomial complex - 3", 1e-12);
+ assert_equal_d(p3.value_at(0.15,-0.56, 0.2), 1062.888869011344, "Polynomial complex - 1");
+ assert_equal_d(p3.value_at(-0.9, 0.39,-0.1), 632.3190417794848, "Polynomial complex - 2");
+ assert_equal_d(p3.value_at(0.2,0.53,-0.95),  1143.933154399575, "Polynomial complex - 3");
+
+}
+
+void polynomial_simplify_print() {
+
+  polynomial p1 = monomial(1,2.0,1) + monomial(1,4.0,3) + monomial(0,-1.0) + monomial(1,-20.0,6) + monomial(1,-2.0,2) + monomial(1,-10.0,5) + monomial(1,3.0,2);
+  string ret;
+  p1.print(&ret);
+  assert_equal_s(ret, "  +3 x^2  -2 x^2  -1  +2 x^1  +4 x^3  -20 x^6  -10 x^5\n", "Polynomial print");
+  p1.simplify();
+  p1.print(&ret);
+  assert_equal_s(ret, "  -20 x^6  -10 x^5  +4 x^3  +1 x^2  +2 x^1  -1\n", "Polynomial print after simplify");
+
+}
+
+void polynomial_horner() {
+
+  // Test from Graillat et al., 2005
+  polynomial p1 = monomial(0,1.0) + monomial(1,-1.0,1);
+  polynomial p  = p1*p1*p1*p1*p1;
+  p.simplify();
+  assert_equal_dp(p.value_at(1.001), -1.0e-15, "Horner accuracy test", 6.0e-13);
 
 }
 
@@ -151,5 +173,6 @@ void polynomial_tests() {
   polynomial_add();
   polynomial_multiply();
   polynomial_complex();
-
+  polynomial_simplify_print();
+  polynomial_horner();
 }

@@ -52,6 +52,8 @@ class polynomial {
     double value_at(double,double,double);
     double get_coeff(int,int,int);
     void simplify();
+    void print() { print(nullptr); }
+    void print(string*);
 
     polynomial operator +(const monomial& other);
     polynomial operator +(const polynomial& other);
@@ -69,6 +71,11 @@ class polynomial {
     int n;
     int d;
     int nm;
+
+  void sort();
+  void quicksort(monomial_list**, int nm);
+  void horner1DEFT(double, double*, double*, double*, double*, int);
+  double horner1D(double, double*, int);
 
   friend polynomial operator *(const double&, const polynomial&);
   friend polynomial operator *(const polynomial& p, const double& a) { return a*p; }
